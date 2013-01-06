@@ -7,12 +7,14 @@
 
 		<link rel="stylesheet" href="website/css/styles.css">
 		<link rel="stylesheet" href="website/css/pygment_trac.css">
+		<link rel="stylesheet" href="website/css/syntax.css">
+
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>
-	<body>
+	<body onload="prettyPrint()">
 	<div class="wrapper">
 		<header>
 			<h1>Module.js</h1>
@@ -103,44 +105,69 @@
 
 			<h2>Module</h2>
 			<p>Information about declaring a constructor, and instatiation.  Cover initialize method/</p>
-			<pre><code>$ cd your_repo_root/repo_name
-			$ git fetch origin
-			$ git checkout gh-pages
-			</code></pre>
+<pre><code class="prettyprint language-js">// creating a module
+module = new Module();
 
+// setting properties on instantiation
+module = new Module({
+  initialize : function(){},
+  scope : '#app-wrapper'
+});
+
+// extending the Module constructor
+MyModule = Module.extend({
+  initialize : funciton(){},
+  start : function(){},
+  stop : function(){}
+});
+module = new MyModule({scope : '#app-wrapper'});
+</code></pre>
+
+			<h3>Properties</h3>
 			<article>
-				<h3>scope</h3>
-
-				<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-				<pre><code>$ cd your_repo_root/repo_name
-				$ git fetch origin
-				$ git checkout gh-pages
-				</code></pre>
+				<h3>scope <code>String</code></h3>
+				<p>A CSS selector representing the modules DOM scope, for example <code>'#anElement'</code>.
+				Value will be <code>null</code> if scope has not been set.</p>
 			</article>
 
 			<article>
-				<h3>$scope</h3>
+				<h3>$scope <code>Object</code></h3>
 
-				<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-				<pre><code>$ cd your_repo_root/repo_name
-				$ git fetch origin
-				$ git checkout gh-pages
-				</code></pre>
+				<p>A jQuery/Zepto object referencing the modules DOM scope.  Value will be <code>null</code> if scope has not been set or jQuery/Zepto isn't being used.</p>
 			</article>
 
 			<article>
-				<h3>events</h3>
+				<h3>events <code>Object</code></h3>
 
-				<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-				<pre><code>$ cd your_repo_root/repo_name
-				$ git fetch origin
-				$ git checkout gh-pages
-				</code></pre>
+				<p>An events hash.  It provides declarative callbacks to handle events that occur on objects within the module.  The context of the callback handlers ( <code>this</code> ) will always be the current module.</p>
+				<p>A basic event declaration includes the object name of interest, the event it emits, and a handler function.
+				</p>
+<pre><code class="prettyprint">events:{
+  'objectName eventName' : function(){ // handle event here }
+}
+</code></pre>
+				<p>
+				To translate this to a real situation, let's say a module has a <code>model</code> object that will emit a <code>'change'</code> event.  We can listen for this event by doing the following:
+				</p>
+<pre><code class="prettyprint">events:{
+  'model change' : function( data ){
+    // handle the model's 'change' event
+  }
+}
+</code></pre>
+				<p>We can assign multiple event handlers to an object like so:</p>
+<pre><code class="prettyprint">events:{
+  'model' : {
+    'change' : function( data ){ // do something },
+    'reset' : function( arg ){},
+    'destroy' : function( arg1, arg2 ){}
+  }
+}
+</code></pre>
+				</p>
 			</article>
-
+			<h3>Methods</h3>
+			<p>Mehh</p>
 			<h3>Designer Templates</h3>
 
 			<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
@@ -161,12 +188,13 @@
 
 		<footer>
 			<p>This project is maintained by <a href="https://github.com/jameslockwood">jameslockwood</a></p>
-			<p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+			<p><small>Hosted on GitHub Pages &mdash; Adapted <a href="https://github.com/orderedlist">orderedlist</a> theme.</small></p>
 		</footer>
 
 	</div>
 
 	<script src="website/js/scale.fix.js"></script>
+	<script src="website/js/syntax.js"></script>
 
 	</body>
 </html>
