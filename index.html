@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="chrome=1">
-		<title>Module by jameslockwood</title>
+		<title>Module.js</title>
 
 		<link rel="stylesheet" href="website/css/styles.css">
 		<link rel="stylesheet" href="website/css/pygment_trac.css">
@@ -32,45 +32,45 @@
 
 				<a class="toc-head" href="#module-intro">Module</a>
 
-				<span class="subtitle">Properties</span>
+				<span class="subtitle"><a href="">Properties</a></span>
 				<ul>
 					<li><a href="#module-scope">scope</a></li>
 					<li><a href="#module-scope">$scope</a></li>
 					<li><a href="#module-scope">events</a></li>
 				</ul>
 
-				<span class="subtitle">Methods</span>
+				<span class="subtitle"><a href="">Methods</a></span>
 				<ul>
-					<li class="method-head">Messaging</li>
+					<li class="method-head"><a href="">Messaging</a></li>
 					<li><a href="#module-scope">on</a></li>
 					<li><a href="#module-scope">off</a></li>
 					<li><a href="#module-scope">emit</a></li>
 
-					<li class="method-head">DOM Scope</li>
+					<li class="method-head"><a href="">DOM Scope</a></li>
 					<li><a href="#module-scope">$</a></li>
 					<li><a href="#module-scope">hide</a></li>
 					<li><a href="#module-scope">show</a></li>
 					<li><a href="#module-scope">setScope</a></li>
 
-					<li class="method-head">Utils</li>
+					<li class="method-head"><a href="">Utils</a></li>
 					<li><a href="#module-scope">bindEvents</a></li>
 					<li><a href="#module-scope">createMap</a></li>
 					<li><a href="#module-scope">log</a></li>
 					<li><a href="#module-scope">throwException</a></li>
 
-					<li class="method-head">Lifecycle Management</li>
+					<li class="method-head"><a href="">Lifecycle Management</a></li>
 					<li><a href="#module-scope">start</a></li>
 					<li><a href="#module-scope">stop</a></li>
 				</ul>
 
-				<span class="subtitle">Functions</span>
+				<span class="subtitle"><a href="">Functions</a></span>
 				<ul>
 					<li><a href="#module-scope">Module.extend</a></li>
 					<li><a href="#module-scope">Module.installEventsTo</a></li>
 				</ul>
 
 				<a class="toc-head" href="#module-intro">Map</a>
-				<span class="subtitle">Methods</span>
+				<span class="subtitle"><a href="">Methods</a></span>
 				<ul>
 					<li><a href="#module-scope">add</a></li>
 					<li><a href="#module-scope">each</a></li>
@@ -97,8 +97,7 @@
 
 		<section>
 
-
-			<p>Talk about instances.  No parent / child relationship.  Drop in a module anywhere (providing it a DOM scope if it has any interactions with the DOM),  subscribe to it’s events, and go from there.</p>
+			<p class="leader">Talk about instances.  No parent / child relationship.  Drop in a module anywhere (providing it a DOM scope if it has any interactions with the DOM),  subscribe to it’s events, and go from there.</p>
 
 			<h2>Introduction</h2>
 			<p>Stuff here...  Dependencies,  what it works with.  Link to tutorials when they're done.</p>
@@ -298,7 +297,7 @@ myModule = new Module({
 			</aside>
 			<article>
 				<h3>bindEvents ()</h3>
-				<p>TODO.</p>
+				<p>Binds all event handlers set in the <code>events</code> property.</p>
 			</article>
 			<article>
 				<h3>createMap <code>( name<b>String</b> )</code></h3>
@@ -306,11 +305,11 @@ myModule = new Module({
 			</article>
 			<article>
 				<h3>log <code>( [* <b>any</b>] )</code></h3>
-				<p>TODO.</p>
+				<p>Logs out provided arguments to the console, if the console is available.</p>
 			</article>
 			<article>
 				<h3>throwException <code>( error<b>Error</b>, [message<b>string</b>] )</code></h3>
-				<p>TODO.</p>
+				<p>Throws an error and emits an error event.</p>
 			</article>
 
 			<h3 class="sect">Lifecycle Management</h3>
@@ -340,33 +339,87 @@ myModule = new Module({
 			</article>
 
 			<h2>Map</h2>
+			<aside>
+				<p>A map object acts like a colleciton.  It allows us to add, get and remove in a consitent manner.  It also provides an interface to iterate over all objects within the map and to listen for events on objects within the map.<br/><br/>
+				Maps are created using a modules <code><a href="#">createMap</a></code> method.</p>
+			</aside>
 			<article>
-				<h3>add <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<h3>add <code>( name<b>String</b>, object<b>Object</b> )</code></h3>
+				<p>Adds an object to the current map.</p>
+<pre><code class="prettyprint">// add a single object
+models.add('myModel', new Model());
+
+// add multiple objects
+models.add({
+  'myModel': new Model(),
+  'yourModel': new Model(),
+  'ourModel': new Model()
+});
+</code></pre>
+			<p>Multiple objects can be added with the same name if desired:</p>
+<pre><code class="prettyprint">// add a single 'test' object
+models.add('test', new Model());
+
+models.get('test'); // returns model
+
+// add more 'test' objects
+models.add('test', new Model());
+models.add('test', new Model());
+
+models.get('test'); // returns [ model, model, model ]
+</code></pre>
 			</article>
 			<article>
-				<h3>each <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<h3>each <code>( mixed )</code></h3>
+				<p>Iterates over each object in the map, invoking a method or applying a callback function depending on the arguments provided.</p>
+				<p>Method invocation on each object via passing method name and arguments:</p>
+<pre><code class="prettyprint">// executes 'foo()' on each object in the map
+models.each('foo');
+
+// executes 'foo()' on each, passing true into the method
+models.each('foo', true )
+</code></pre>
+				<p>Iterating over each object by passing in a function callback:</p>
+<pre><code class="prettyprint">// applies callback on each object in the map
+models.each( function( model, name ){
+  model.foo();
+});
+</code></pre>
 			</article>
 			<article>
 				<h3>eachTry <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Similar to each, however if the stated method does not exist then no error is thrown.  This is useful when we want to try invoke a mathod on all of our objects in a map knowing that the method may not exist on some objects.</p>
 			</article>
 			<article>
 				<h3>length <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Returns the number of objects currently in the map.</p>
 			</article>
 			<article>
 				<h3>on <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Handle events on all objects within the map.  See <code><a href="#">on()</a></code></p>
 			</article>
 			<article>
 				<h3>off <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Remove event handlers on all objects within the map.  See <code><a href="#">off()</a></code></p>
 			</article>
 			<article>
 				<h3>remove <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Removes one or all objects from a map.</p>
+<pre><code class="prettyprint">models.add({
+  'myModel': new Model(),
+  'yourModel': new Model(),
+  'ourModel': new Model()
+});
+models.length(); // 3
+
+// remove 'myModel' object
+models.remove('myModel');
+models.length(); // 2
+
+// remove all objects in the map
+models.remove();
+models.length(); // 0
+</code></pre>
 			</article>
 		</section>
 
