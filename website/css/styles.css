@@ -32,7 +32,7 @@ h3, h4, h5, h6 {
   color:#494949;
 }
 
-a {
+a, a code {
   color:#f7024a;
   font-weight:400;
   text-decoration:none;

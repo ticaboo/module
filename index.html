@@ -147,24 +147,70 @@ module = new MyModule({scope : '#app-wrapper'});
 }
 </code></pre>
 				<p>
-				To translate this to a real situation, let's say a module has a <code>model</code> object that will emit a <code>'change'</code> event.  We can listen for this event by doing the following:
+				Suppose a module has a <code>model</code> object that will emit a <code>'change'</code> event.  We can listen for this event by:
 				</p>
-<pre><code class="prettyprint">events:{
-  'model change' : function( data ){
-    // handle the model's 'change' event
+<pre><code class="prettyprint">new Module({
+  initialize: function(){
+    this.model = new Model();
+    this.bindEvents();
+  },
+  events: {
+    'model change' : function( data ){
+      // handle the model's 'change' event
+    }
   }
-}
+});
 </code></pre>
-				<p>We can assign multiple event handlers to an object like so:</p>
+				<p>We can assign multiple event handlers on an object:</p>
 <pre><code class="prettyprint">events:{
   'model' : {
-    'change' : function( data ){ // do something },
+    'change' : function( data ){},
     'reset' : function( arg ){},
     'destroy' : function( arg1, arg2 ){}
   }
 }
 </code></pre>
-				</p>
+				<p>We can listen out for events across multiple objects by using a wildcard:</p>
+<pre><code class="prettyprint">events:{
+  // handle change event on the model
+  'model change' : function( data ){ // do something },
+
+  // handle change event on any object
+  '* change' : function( data ){ // captures same event },
+
+  // handle multiple events on any object
+  '*' : {
+    'change' : function( data ){},
+    'anotherEvent' : function(){}
+  }
+}
+</code></pre>
+				<p>When using <a href="#">mappings</a>, matching event handlers defined are automatically bound - <a href="#"><code>bindEvents()</code></a> does not need to be called.
+				Suppose a module has a <code>map</code> containing chat, email and notification sub-modules. Event handlers can be declared like so:</p>
+<pre><code class="prettyprint">new Module({
+  initialize: function(){
+    this.widgets = this.createMap('widgets');
+    this.widgets.add({
+      'email' : new EmailModule(),
+      'chat' : new ChatModule(),
+      'notification': new NotificationModule()
+    });
+  },
+  events: {
+    // handles the chat widgets 'message' event
+    'widgets.chat message': function( message ){
+      this.widgets.get('notification').alert( message );
+    },
+
+    // handles any widgets 'message' event
+    // the maps object and name are automatically
+    // injected into the handler function
+    'widgets.* message': function( widget, widgetName, message ){
+      this.widgets.get('notification').alert( message );
+    }
+  }
+});
+</code></pre>
 			</article>
 			<h3>Methods</h3>
 			<p>Mehh</p>
