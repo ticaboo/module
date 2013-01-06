@@ -130,7 +130,7 @@ app.start();
 
 			<h3 id="module-properties" class="sect">Properties</h3>
 			<aside>
-				<p>A module has three properties you need to worry about - <code>scope</code> and <code>$scope</code> both relate to the modules <a href="#">DOM scope</a>. The <code>events</code> property is set manually to declare event handlers.</p>
+				<p>A module has three properties you need to worry about - <code>scope</code> and <code>$scope</code> both relate to the modules <a href="#module-dom">DOM scope</a>. The <code>events</code> property is set manually to declare event handlers.</p>
 			</aside>
 			<article id="module-scope">
 				<h3>scope <code>String</code></h3>
@@ -193,7 +193,7 @@ app.start();
   }
 }
 </code></pre>
-				<p>When using <a href="#">mappings</a>, matching event handlers are automatically bound - <a href="#"><code>bindEvents()</code></a> does not need to be called.
+				<p>When using <a href="#map">mappings</a>, matching event handlers are automatically bound - <a href="#module-bindevents"><code>bindEvents()</code></a> does not need to be called.
 				Suppose a module has a <code>map</code> containing chat, email and notification sub-modules. Event handlers can be declared like so:</p>
 <pre><code class="prettyprint">new Module({
   initialize: function(){
@@ -340,7 +340,7 @@ myModule = new Module({
 			<h2 id="map">Map</h2>
 			<aside>
 				<p>A map object acts like a colleciton.  It allows us to add, get and remove in a consitent manner.  It also provides an interface to iterate over all objects within the map and to listen for events on objects within the map.<br/><br/>
-				Maps are created using a modules <code><a href="#">createMap</a></code> method.</p>
+				Maps are created using a modules <code><a href="#module-createmap">createMap</a></code> method.</p>
 			</aside>
 			<article id="map-add">
 				<h3>add <code>( name<b>String</b>, object<b>Object</b> )</code></h3>
@@ -395,11 +395,11 @@ models.each( function( model, name ){
 			</article>
 			<article id="map-on">
 				<h3>on <code>( name<b>String</b> )</code></h3>
-				<p>Handle events on all objects within the map.  See <code><a href="#">on()</a></code></p>
+				<p>Handle events on all objects within the map.  See <code><a href="#module-on">on()</a></code></p>
 			</article>
 			<article id="map-off">
 				<h3>off <code>( name<b>String</b> )</code></h3>
-				<p>Remove event handlers on all objects within the map.  See <code><a href="#">off()</a></code></p>
+				<p>Remove event handlers on all objects within the map.  See <code><a href="#module-off">off()</a></code></p>
 			</article>
 			<article id="map-remove">
 				<h3>remove <code>( name<b>String</b> )</code></h3>

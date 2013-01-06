@@ -24,6 +24,9 @@ h1, h2, h3 {
 h1 {
   font-size: 2em;
 }
+h1, h2, h3.sect {
+  text-shadow: 1px 1px 1px rgba(20,20,20,0.35);
+}
 
 h2 {
   color:#393939;
