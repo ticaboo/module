@@ -18,7 +18,7 @@
 	<div class="wrapper">
 		<header>
 			<h1>Module.js</h1>
-			<p>A lightweight library for creating large-scale modular JavaScript applications</p>
+			<p>A lightweight library for creating modular JavaScript applications</p>
 
 			<ul class="downloads">
 				<li><a href="https://raw.github.com/jameslockwood/module/master/module.js"><strong>Download</strong>Module.js</a></li>
@@ -101,10 +101,11 @@
 			<p>Talk about instances.  No parent / child relationship.  Drop in a module anywhere (providing it a DOM scope if it has any interactions with the DOM),  subscribe to it’s events, and go from there.</p>
 
 			<h2>Introduction</h2>
-			<p>Stuff here...  Dependencies,  what it works with.</p>
+			<p>Stuff here...  Dependencies,  what it works with.  Link to tutorials when they're done.</p>
+			<p>Modular Javascript Architectures - link to other resources.</p>
 
 			<h2>Module</h2>
-			<p>Information about declaring a constructor, and instatiation.  Cover initialize method/</p>
+			<p>To create a module, simply instantiate the Module constructor.  If the module is to be concerned with the DOM, then a DOM reference (in the form of a CSS selector or jQuery/Zepto object) should be passed in as the modules <code>scope</code>.</p>
 <pre><code class="prettyprint language-js">// creating a module
 module = new Module();
 
@@ -113,17 +114,26 @@ module = new Module({
   initialize : function(){},
   scope : '#app-wrapper'
 });
+</code></pre>
 
-// extending the Module constructor
-MyModule = Module.extend({
+			<p>The <code>initialize()</code> method is automatically invoked when the module is created.  You can extend the module constructor too:</p>
+
+<pre><code class="prettyprint language-js">// extending the Module constructor
+App = Module.extend({
   initialize : funciton(){},
   start : function(){},
   stop : function(){}
 });
-module = new MyModule({scope : '#app-wrapper'});
+// create our app, passing in it's scope
+app = new App({scope : '#app-wrapper'});
+app.start();
 </code></pre>
+			<p>You'll notice above that unimplemented <code>start</code> and <code>stop</code> methods have been supplied.  These are the primary strategies to manage a modules lifecycle.</p>
 
-			<h3>Properties</h3>
+			<h3 class="sect">Properties</h3>
+			<aside>
+				<p>A module has three properties you need to worry about - <code>scope</code> and <code>$scope</code> both relate to the modules <a href="#">DOM scope</a>. The <code>events</code> property is set manually to declare event handlers.</p>
+			</aside>
 			<article>
 				<h3>scope <code>String</code></h3>
 				<p>A CSS selector representing the modules DOM scope, for example <code>'#anElement'</code>.
@@ -139,7 +149,7 @@ module = new MyModule({scope : '#app-wrapper'});
 			<article>
 				<h3>events <code>Object</code></h3>
 
-				<p>An events hash.  It provides declarative callbacks to handle events that occur on objects within the module.  The context of the callback handlers ( <code>this</code> ) will always be the current module.</p>
+				<p>An events hash.  It provides declarative callbacks to handle events that occur on objects within a module.  The context of the callback handlers ( <code>this</code> ) will always be the current module.</p>
 				<p>A basic event declaration includes the object name of interest, the event it emits, and a handler function.
 				</p>
 <pre><code class="prettyprint">events:{
@@ -185,7 +195,7 @@ module = new MyModule({scope : '#app-wrapper'});
   }
 }
 </code></pre>
-				<p>When using <a href="#">mappings</a>, matching event handlers defined are automatically bound - <a href="#"><code>bindEvents()</code></a> does not need to be called.
+				<p>When using <a href="#">mappings</a>, matching event handlers are automatically bound - <a href="#"><code>bindEvents()</code></a> does not need to be called.
 				Suppose a module has a <code>map</code> containing chat, email and notification sub-modules. Event handlers can be declared like so:</p>
 <pre><code class="prettyprint">new Module({
   initialize: function(){
@@ -212,28 +222,156 @@ module = new MyModule({scope : '#app-wrapper'});
 });
 </code></pre>
 			</article>
-			<h3>Methods</h3>
-			<p>Mehh</p>
-			<h3>Designer Templates</h3>
+			<h3 class="sect">Communication Methods</h3>
+			<aside>
+				<p>TODO - short introduction to module communication.</p>
+			</aside>
+			<article>
+				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
+				<p>Binds a callback function to the module. The callback will be invoked whenever the event is fired.</p>
+<pre><code class="prettyprint">module.on('error', function( error, message ){
+  throw error;
+})
+</code></pre>
+				<p>To supply a context value for <code>this</code> when the callback is invoked, pass the optional third argument.</code></p>
+			</article>
+			<article>
+				<h3>off <code>( [event<b>string</b>], [handler<b>function</b>], [context] )</code></h3>
+				<p>Removes a previously-bound callback function from the module. If no context is specified, all of the versions of the callback with different contexts will be removed. If no callback is specified, all callbacks for the event will be removed. If no event is specified, callbacks for all events will be removed.</p>
+<pre><code class="prettyprint">// Removes just the 'onError' callback.
+module.off('error', onError);
 
-			<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+// Removes all 'error' callbacks.
+module.off('error');
 
-			<h3>Rather Drive Stick?</h3>
+// Removes all callbacks on the module.
+module.off();
+</code></pre>
+			</article>
+			<article>
+				<h3>emit <code>( event<b>string</b>, [*args<b>any</b>] )</code></h3>
+				<p>Emits an event. Subsequent arguments provided in <code>emit</code> will be passed along to any event handlers.</p>
+<pre><code class="prettyprint">module.emit('newMessage');
+module.emit('newMessage', details);
+</code></pre>
+			</article>
 
-			<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+			<h3 class="sect">DOM Scope Methods</h3>
+			<aside>
+				<p>TODO - short introduction to DOM scope stuff.  Mention that module isn't responsible for DOM manipulation.</p>
+			</aside>
+			<article>
+				<h3>$ <code>( selector<b>string</b> )</code></h3>
+				<p>If jQuery or Zepto is included on the page, each module has a $ function that runs queries scoped within the modules DOM scope.</p>
+<pre><code class="prettyprint">// run a scoped query within our module
+module.$('.foo');
 
-			<h3>Authors and Contributors</h3>
+// create a Backbone view, passing in the module's scope
+myModule = new Module({
+  initialize : function(){
+    this.view = new Backbone.View({
+      el: this.$('.foo')
+    });
+  },
+  start : function(){
+    this.view.render();
+  }
+});
+</code></pre>
+			</article>
+			<article>
+				<h3>hide ()</h3>
+				<p>Hides the modules element - equivalent to <code>this.$scope.hide()</code>. All other DOM manipulation should be delegated to views.</p>
+			</article>
+			<article>
+				<h3>show ()</h3>
+				<p>Show the modules element - equivalent to <code>this.$scope.show()</code>. All other DOM manipulation should be delegated to views.</p>
+			</article>
+			<article>
+				<h3>setScope <code>( scope<b>string or jquery/Zepto object</b> )</code></h3>
+				<p>Sets the module's scope.  Accepts a CSS selector or a jQuery/Zepto object referencing a DOM element.</p>
+			</article>
 
-			<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+			<h3 class="sect">Utils</h3>
+			<aside>
+				<p>Todo - utils. State they they're important.</p>
+			</aside>
+			<article>
+				<h3>bindEvents ()</h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>createMap <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>log <code>( [* <b>any</b>] )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>throwException <code>( error<b>Error</b>, [message<b>string</b>] )</code></h3>
+				<p>TODO.</p>
+			</article>
 
-			<h3>Support or Contact</h3>
+			<h3 class="sect">Lifecycle Management</h3>
+			<aside>
+				<p>Todo - link to tutorials.</p>
+			</aside>
+			<article>
+				<h3>start ()</h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>stop <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
 
-			<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+			<h3 class="sect">'Static' Functions</h3>
+			<aside>
+				<p>Functions that are attached onto the <code>Module</code> constructor to use whenever.</p>
+			</aside>
+			<article>
+				<h3>Module.extend <code>( properties<b>object</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>Module.installEventsTo <code>( targetObject<b>object</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
 
+			<h2>Map</h2>
+			<article>
+				<h3>add <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>each <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>eachTry <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>length <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>on <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>off <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
+			<article>
+				<h3>remove <code>( name<b>String</b> )</code></h3>
+				<p>TODO.</p>
+			</article>
 		</section>
 
 		<footer>
-			<p>This project is maintained by <a href="https://github.com/jameslockwood">jameslockwood</a></p>
+			<p>Project maintained by <a href="https://github.com/jameslockwood">jameslockwood</a></p>
 			<p><small>Hosted on GitHub Pages &mdash; Adapted <a href="https://github.com/orderedlist">orderedlist</a> theme.</small></p>
 		</footer>
 

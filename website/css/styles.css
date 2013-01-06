@@ -28,6 +28,10 @@ h2 {
   color:#393939;
 }
 
+h3.sect{
+  margin-top: 2em;
+}
+
 h3, h4, h5, h6 {
   color:#494949;
 }
@@ -67,8 +71,16 @@ code, pre {
   font-size:12px;
 }
 
-comment {
-  color: #090;
+code b{
+  font-weight: normal;
+  color: #aaa;
+  margin-left: 0.5em;
+}
+aside p {
+  background: #eee;
+  padding: 1em;
+  border-radius: 0.5em;
+  border: 1px solid #ddd;
 }
 
 pre {
