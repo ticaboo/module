@@ -28,68 +28,67 @@
 
 			<nav>
 
-				<a class="toc-head" href="#module-intro">Introduction</a>
+				<a class="toc-head" href="#intro">Introduction</a>
 
-				<a class="toc-head" href="#module-intro">Module</a>
+				<a class="toc-head" href="#module">Module</a>
 
-				<span class="subtitle"><a href="">Properties</a></span>
+				<span class="subtitle"><a href="#module-properties">Properties</a></span>
 				<ul>
 					<li><a href="#module-scope">scope</a></li>
-					<li><a href="#module-scope">$scope</a></li>
-					<li><a href="#module-scope">events</a></li>
+					<li><a href="#module-sscope">$scope</a></li>
+					<li><a href="#module-events">events</a></li>
 				</ul>
 
-				<span class="subtitle"><a href="">Methods</a></span>
+				<span class="subtitle"><a href="#module-messaging">Methods</a></span>
 				<ul>
-					<li class="method-head"><a href="">Messaging</a></li>
-					<li><a href="#module-scope">on</a></li>
-					<li><a href="#module-scope">off</a></li>
-					<li><a href="#module-scope">emit</a></li>
+					<li class="method-head"><a href="#module-messaging">Messaging</a></li>
+					<li><a href="#module-on">on</a></li>
+					<li><a href="#module-off">off</a></li>
+					<li><a href="#module-emit">emit</a></li>
 
-					<li class="method-head"><a href="">DOM Scope</a></li>
-					<li><a href="#module-scope">$</a></li>
-					<li><a href="#module-scope">hide</a></li>
-					<li><a href="#module-scope">show</a></li>
-					<li><a href="#module-scope">setScope</a></li>
+					<li class="method-head"><a href="#module-dom">DOM Scope</a></li>
+					<li><a href="#module-selector">$</a></li>
+					<li><a href="#module-hide">hide</a></li>
+					<li><a href="#module-show">show</a></li>
+					<li><a href="#module-setscope">setScope</a></li>
 
-					<li class="method-head"><a href="">Utils</a></li>
-					<li><a href="#module-scope">bindEvents</a></li>
-					<li><a href="#module-scope">createMap</a></li>
-					<li><a href="#module-scope">log</a></li>
-					<li><a href="#module-scope">throwException</a></li>
+					<li class="method-head"><a href="#module-utils">Utils</a></li>
+					<li><a href="#module-bindevents">bindEvents</a></li>
+					<li><a href="#module-createmap">createMap</a></li>
+					<li><a href="#module-log">log</a></li>
+					<li><a href="#module-throwexception">throwException</a></li>
 
-					<li class="method-head"><a href="">Lifecycle Management</a></li>
-					<li><a href="#module-scope">start</a></li>
-					<li><a href="#module-scope">stop</a></li>
+					<li class="method-head"><a href="#module-lifecycle">Lifecycle Management</a></li>
+					<li><a href="#module-start">start</a></li>
+					<li><a href="#module-stop">stop</a></li>
 				</ul>
 
-				<span class="subtitle"><a href="">Functions</a></span>
+				<span class="subtitle"><a href="#module-functions">Functions</a></span>
 				<ul>
-					<li><a href="#module-scope">Module.extend</a></li>
-					<li><a href="#module-scope">Module.installEventsTo</a></li>
+					<li><a href="#module-extend">Module.extend</a></li>
+					<li><a href="#module-installeventsto">Module.installEventsTo</a></li>
 				</ul>
 
-				<a class="toc-head" href="#module-intro">Map</a>
-				<span class="subtitle"><a href="">Methods</a></span>
+				<a class="toc-head" href="#map">Map</a>
 				<ul>
-					<li><a href="#module-scope">add</a></li>
-					<li><a href="#module-scope">each</a></li>
-					<li><a href="#module-scope">eachTry</a></li>
-					<li><a href="#module-scope">length</a></li>
-					<li><a href="#module-scope">on</a></li>
-					<li><a href="#module-scope">off</a></li>
-					<li><a href="#module-scope">remove</a></li>
+					<li><a href="#map-add">add</a></li>
+					<li><a href="#map-each">each</a></li>
+					<li><a href="#map-eachtry">eachTry</a></li>
+					<li><a href="#map-length">length</a></li>
+					<li><a href="#map-on">on</a></li>
+					<li><a href="#map-off">off</a></li>
+					<li><a href="#map-remove">remove</a></li>
 				</ul>
 
 
-				<a class="toc-head" href="#module-intro">Tutorials</a>
+				<a class="toc-head" href="#tutorials">Tutorials</a>
 				<ul>
-					<li><a href="#module-scope">Creating a Module</a></li>
-					<li><a href="#module-scope">Using Module Scope</a></li>
-					<li><a href="#module-scope">Using Maps</a></li>
-					<li><a href="#module-scope">Hooking-up Events</a></li>
-					<li><a href="#module-scope">Creating a Modular Application</a></li>
-					<li><a href="#module-scope">Lifecycle Management</a></li>
+					<li><a href="#tutorials-creating">Creating a Module</a></li>
+					<li><a href="#tutorials-scope">Using Module Scope</a></li>
+					<li><a href="#tutorials-map">Using Maps</a></li>
+					<li><a href="#tutorials-events">Hooking-up Events</a></li>
+					<li><a href="#tutorials-app">Creating a Modular Application</a></li>
+					<li><a href="#tutorials-lifecycle">Lifecycle Management</a></li>
 				</ul>
 			</nav>
 
@@ -99,11 +98,11 @@
 
 			<p class="leader">Talk about instances.  No parent / child relationship.  Drop in a module anywhere (providing it a DOM scope if it has any interactions with the DOM),  subscribe to it’s events, and go from there.</p>
 
-			<h2>Introduction</h2>
+			<h2 id="intro">Introduction</h2>
 			<p>Stuff here...  Dependencies,  what it works with.  Link to tutorials when they're done.</p>
 			<p>Modular Javascript Architectures - link to other resources.</p>
 
-			<h2>Module</h2>
+			<h2 id="module">Module</h2>
 			<p>To create a module, simply instantiate the Module constructor.  If the module is to be concerned with the DOM, then a DOM reference (in the form of a CSS selector or jQuery/Zepto object) should be passed in as the modules <code>scope</code>.</p>
 <pre><code class="prettyprint language-js">// creating a module
 module = new Module();
@@ -129,23 +128,23 @@ app.start();
 </code></pre>
 			<p>You'll notice above that unimplemented <code>start</code> and <code>stop</code> methods have been supplied.  These are the primary strategies to manage a modules lifecycle.</p>
 
-			<h3 class="sect">Properties</h3>
+			<h3 id="module-properties" class="sect">Properties</h3>
 			<aside>
 				<p>A module has three properties you need to worry about - <code>scope</code> and <code>$scope</code> both relate to the modules <a href="#">DOM scope</a>. The <code>events</code> property is set manually to declare event handlers.</p>
 			</aside>
-			<article>
+			<article id="module-scope">
 				<h3>scope <code>String</code></h3>
 				<p>A CSS selector representing the modules DOM scope, for example <code>'#anElement'</code>.
 				Value will be <code>null</code> if scope has not been set.</p>
 			</article>
 
-			<article>
+			<article id="module-sscope">
 				<h3>$scope <code>Object</code></h3>
 
 				<p>A jQuery/Zepto object referencing the modules DOM scope.  Value will be <code>null</code> if scope has not been set or jQuery/Zepto isn't being used.</p>
 			</article>
 
-			<article>
+			<article id="module-events">
 				<h3>events <code>Object</code></h3>
 
 				<p>An events hash.  It provides declarative callbacks to handle events that occur on objects within a module.  The context of the callback handlers ( <code>this</code> ) will always be the current module.</p>
@@ -221,11 +220,11 @@ app.start();
 });
 </code></pre>
 			</article>
-			<h3 class="sect">Communication Methods</h3>
+			<h3 id="module-messaging" class="sect">Communication Methods</h3>
 			<aside>
 				<p>TODO - short introduction to module communication.</p>
 			</aside>
-			<article>
+			<article id="module-on">
 				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
 				<p>Binds a callback function to the module. The callback will be invoked whenever the event is fired.</p>
 <pre><code class="prettyprint">module.on('error', function( error, message ){
@@ -234,7 +233,7 @@ app.start();
 </code></pre>
 				<p>To supply a context value for <code>this</code> when the callback is invoked, pass the optional third argument.</code></p>
 			</article>
-			<article>
+			<article id="module-off">
 				<h3>off <code>( [event<b>string</b>], [handler<b>function</b>], [context] )</code></h3>
 				<p>Removes a previously-bound callback function from the module. If no context is specified, all of the versions of the callback with different contexts will be removed. If no callback is specified, all callbacks for the event will be removed. If no event is specified, callbacks for all events will be removed.</p>
 <pre><code class="prettyprint">// Removes just the 'onError' callback.
@@ -247,7 +246,7 @@ module.off('error');
 module.off();
 </code></pre>
 			</article>
-			<article>
+			<article id="module-emit">
 				<h3>emit <code>( event<b>string</b>, [*args<b>any</b>] )</code></h3>
 				<p>Emits an event. Subsequent arguments provided in <code>emit</code> will be passed along to any event handlers.</p>
 <pre><code class="prettyprint">module.emit('newMessage');
@@ -255,11 +254,11 @@ module.emit('newMessage', details);
 </code></pre>
 			</article>
 
-			<h3 class="sect">DOM Scope Methods</h3>
+			<h3 id="module-dom" class="sect">DOM Scope Methods</h3>
 			<aside>
 				<p>TODO - short introduction to DOM scope stuff.  Mention that module isn't responsible for DOM manipulation.</p>
 			</aside>
-			<article>
+			<article id="module-selector">
 				<h3>$ <code>( selector<b>string</b> )</code></h3>
 				<p>If jQuery or Zepto is included on the page, each module has a $ function that runs queries scoped within the modules DOM scope.</p>
 <pre><code class="prettyprint">// run a scoped query within our module
@@ -278,72 +277,72 @@ myModule = new Module({
 });
 </code></pre>
 			</article>
-			<article>
+			<article id="module-hide">
 				<h3>hide ()</h3>
 				<p>Hides the modules element - equivalent to <code>this.$scope.hide()</code>. All other DOM manipulation should be delegated to views.</p>
 			</article>
-			<article>
+			<article id="module-show">
 				<h3>show ()</h3>
 				<p>Show the modules element - equivalent to <code>this.$scope.show()</code>. All other DOM manipulation should be delegated to views.</p>
 			</article>
-			<article>
+			<article id="module-setscope">
 				<h3>setScope <code>( scope<b>string or jquery/Zepto object</b> )</code></h3>
 				<p>Sets the module's scope.  Accepts a CSS selector or a jQuery/Zepto object referencing a DOM element.</p>
 			</article>
 
-			<h3 class="sect">Utils</h3>
+			<h3 id="module-utils" class="sect">Utils</h3>
 			<aside>
 				<p>Todo - utils. State they they're important.</p>
 			</aside>
-			<article>
+			<article id="module-bindevents">
 				<h3>bindEvents ()</h3>
 				<p>Binds all event handlers set in the <code>events</code> property.</p>
 			</article>
-			<article>
+			<article id="module-createmap">
 				<h3>createMap <code>( name<b>String</b> )</code></h3>
 				<p>TODO.</p>
 			</article>
-			<article>
+			<article id="module-log">
 				<h3>log <code>( [* <b>any</b>] )</code></h3>
 				<p>Logs out provided arguments to the console, if the console is available.</p>
 			</article>
-			<article>
+			<article id="module-throwexception">
 				<h3>throwException <code>( error<b>Error</b>, [message<b>string</b>] )</code></h3>
 				<p>Throws an error and emits an error event.</p>
 			</article>
 
-			<h3 class="sect">Lifecycle Management</h3>
+			<h3 id="module-lifecycle" class="sect">Lifecycle Management</h3>
 			<aside>
 				<p>Todo - link to tutorials.</p>
 			</aside>
-			<article>
+			<article id="module-start">
 				<h3>start ()</h3>
 				<p>TODO.</p>
 			</article>
-			<article>
+			<article id="module-stop">
 				<h3>stop <code>( name<b>String</b> )</code></h3>
 				<p>TODO.</p>
 			</article>
 
-			<h3 class="sect">'Static' Functions</h3>
+			<h3 id="module-functions" class="sect">'Static' Functions</h3>
 			<aside>
 				<p>Functions that are attached onto the <code>Module</code> constructor to use whenever.</p>
 			</aside>
-			<article>
+			<article id="module-extend">
 				<h3>Module.extend <code>( properties<b>object</b> )</code></h3>
 				<p>TODO.</p>
 			</article>
-			<article>
+			<article id="module-installeventsto">
 				<h3>Module.installEventsTo <code>( targetObject<b>object</b> )</code></h3>
 				<p>TODO.</p>
 			</article>
 
-			<h2>Map</h2>
+			<h2 id="map">Map</h2>
 			<aside>
 				<p>A map object acts like a colleciton.  It allows us to add, get and remove in a consitent manner.  It also provides an interface to iterate over all objects within the map and to listen for events on objects within the map.<br/><br/>
 				Maps are created using a modules <code><a href="#">createMap</a></code> method.</p>
 			</aside>
-			<article>
+			<article id="map-add">
 				<h3>add <code>( name<b>String</b>, object<b>Object</b> )</code></h3>
 				<p>Adds an object to the current map.</p>
 <pre><code class="prettyprint">// add a single object
@@ -369,7 +368,7 @@ models.add('test', new Model());
 models.get('test'); // returns [ model, model, model ]
 </code></pre>
 			</article>
-			<article>
+			<article id="map-each">
 				<h3>each <code>( mixed )</code></h3>
 				<p>Iterates over each object in the map, invoking a method or applying a callback function depending on the arguments provided.</p>
 				<p>Method invocation on each object via passing method name and arguments:</p>
@@ -386,23 +385,23 @@ models.each( function( model, name ){
 });
 </code></pre>
 			</article>
-			<article>
+			<article id="map-eachtry">
 				<h3>eachTry <code>( name<b>String</b> )</code></h3>
 				<p>Similar to each, however if the stated method does not exist then no error is thrown.  This is useful when we want to try invoke a mathod on all of our objects in a map knowing that the method may not exist on some objects.</p>
 			</article>
-			<article>
+			<article id="map-length">
 				<h3>length <code>( name<b>String</b> )</code></h3>
 				<p>Returns the number of objects currently in the map.</p>
 			</article>
-			<article>
+			<article id="map-on">
 				<h3>on <code>( name<b>String</b> )</code></h3>
 				<p>Handle events on all objects within the map.  See <code><a href="#">on()</a></code></p>
 			</article>
-			<article>
+			<article id="map-off">
 				<h3>off <code>( name<b>String</b> )</code></h3>
 				<p>Remove event handlers on all objects within the map.  See <code><a href="#">off()</a></code></p>
 			</article>
-			<article>
+			<article id="map-remove">
 				<h3>remove <code>( name<b>String</b> )</code></h3>
 				<p>Removes one or all objects from a map.</p>
 <pre><code class="prettyprint">models.add({
