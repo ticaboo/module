@@ -80,11 +80,20 @@ code b{
   color: #aaa;
   margin-left: 0.5em;
 }
-aside p {
+aside {
   background: #eee;
   padding: 1em;
   border-radius: 0.5em;
   border: 1px solid #ddd;
+}
+
+aside p{
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+aside p:first-child{
+  margin-top: 0;
 }
 
 pre {
@@ -207,7 +216,7 @@ section {
   width:500px;
   float:right;
   padding-bottom:50px;
-  text-align: justify;
+  text-align: left;
 }
 
 small {

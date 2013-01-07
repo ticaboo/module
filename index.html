@@ -195,13 +195,15 @@ app.start();
 </code></pre>
 				<p>When using <a href="#map">mappings</a>, matching event handlers are automatically bound - <a href="#module-bindevents"><code>bindEvents()</code></a> does not need to be called.
 				Suppose a module has a <code>map</code> containing chat, email and notification sub-modules. Event handlers can be declared like so:</p>
-<pre><code class="prettyprint">new Module({
+<pre><code class="prettyprint">App = Module.extend({
   initialize: function(){
     this.widgets = this.createMap('widgets');
+  },
+  start: function(){
     this.widgets.add({
-      'email' : new EmailModule(),
-      'chat' : new ChatModule(),
-      'notification': new NotificationModule()
+      'email' : new EmailModule({scope: this.$('#email')}),
+      'chat' : new ChatModule({scope: this.$('#chat')}),
+      'notification': new NotificationModule({scope: this.$('#notify')}),
     });
   },
   events: {
@@ -222,16 +224,20 @@ app.start();
 			</article>
 			<h3 id="module-messaging" class="sect">Communication Methods</h3>
 			<aside>
-				<p>TODO - short introduction to module communication.</p>
+				<p>A module is designed to be used in an event-driven architecture.  To promote loose coupling and seperation of concerns, each module is self-concerned and should assume no knowledge of <i>anything</i> beyond itself and it's contents, where possible.</p>
+				<p>Following this paradigm, each module has it's own <a href="http://lostechies.com/derickbailey/2012/04/03/revisiting-the-backbone-event-aggregator-lessons-learned/">event aggregator</a> which can <code><a href="#module-emit">emit</a></code> events of interest, and also provides a mechanism for others to subcribe to any of these events using the <code><a href="#module-on">on</a></code> method.</p>
+				<p><strong>Further Reading</strong> &nbsp; For more information on event-driven communication, take a look at the <a href="#tutorials-app">Creating a Modular Application</a> tutorial which covers how to 'wire-up' your various modules.  Additionally, Addy Osmani has written an explanation of cross-module communication using the <a href="http://addyosmani.com/largescalejavascript/#mediatorpattern">mediator pattern</a>.</p>
 			</aside>
 			<article id="module-on">
 				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
-				<p>Binds a callback function to the module. The callback will be invoked whenever the event is fired.</p>
+				<p>Provides a mechanism to subscribe to a modules events.  The method binds a callback function to the module. The callback will be invoked whenever the event is fired.</p>
 <pre><code class="prettyprint">module.on('error', function( error, message ){
   throw error;
 })
 </code></pre>
 				<p>To supply a context value for <code>this</code> when the callback is invoked, pass the optional third argument.</code></p>
+				<p>Related note:&nbsp; A modules <code><a href="#module-events">events</a></code> property can be used to declare event handlers on any of a module's properties which emit events.</p>
+
 			</article>
 			<article id="module-off">
 				<h3>off <code>( [event<b>string</b>], [handler<b>function</b>], [context] )</code></h3>
@@ -245,6 +251,7 @@ module.off('error');
 // Removes all callbacks on the module.
 module.off();
 </code></pre>
+				<p>Remember to unbind events when you destoy your module - see the <a href="#tutorials-lifecycle">Module Lifecycle Management</a> tutorial.</p>
 			</article>
 			<article id="module-emit">
 				<h3>emit <code>( event<b>string</b>, [*args<b>any</b>] )</code></h3>
@@ -256,7 +263,9 @@ module.emit('newMessage', details);
 
 			<h3 id="module-dom" class="sect">DOM Scope Methods</h3>
 			<aside>
-				<p>TODO - short introduction to DOM scope stuff.  Mention that module isn't responsible for DOM manipulation.</p>
+				<p>Each module is self-concerned; it should only ever interact with it's own DOM scope.  The following methods provide access to a module's scoped DOM reference - ringfencing it away from the rest of the DOM.</p>
+				<p><strong>Note</strong> &nbsp; It's worth an important mention that each module shouldn't be <i>directly</i> resposible for manipulating it's own DOM reference. Each module in-effect is acting like a controller, managing it's own models, views and event emission.</p>
+				<p>Therefore - to keep things right and proper - a module *should* delegate any DOM interactions to it's own view objects.</p>
 			</aside>
 			<article id="module-selector">
 				<h3>$ <code>( selector<b>string</b> )</code></h3>
@@ -292,23 +301,29 @@ myModule = new Module({
 
 			<h3 id="module-utils" class="sect">Utils</h3>
 			<aside>
-				<p>Todo - utils. State they they're important.</p>
+				<p>Various utility methods used for Map creation, event binding, logging and error handling.</p>
 			</aside>
 			<article id="module-bindevents">
 				<h3>bindEvents ()</h3>
-				<p>Binds all event handlers set in the <code>events</code> property.</p>
+				<p>Binds event handlers set in <code><a href="#module-events">events</a></code> to any matching properties on the module.</p>
 			</article>
 			<article id="module-createmap">
 				<h3>createMap <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Returns a <code>Map</code> object - see <code><a href="#map">Map</a></code> documentation.</p>
 			</article>
 			<article id="module-log">
-				<h3>log <code>( [* <b>any</b>] )</code></h3>
-				<p>Logs out provided arguments to the console, if the console is available.</p>
+				<h3>log <code>( [*<b>any</b>] )</code></h3>
+				<p>Logs out supplied arguments to the console, if the console is available.</p>
 			</article>
 			<article id="module-throwexception">
 				<h3>throwException <code>( error<b>Error</b>, [message<b>string</b>] )</code></h3>
 				<p>Throws an error and emits an error event.</p>
+<pre><code class="prettyprint">module.on('error', function(error, message){
+  console.log( message );
+});
+// logs out 'Something went wrong';
+module.throwException(new Error('Something went wrong'));
+</code></pre>
 			</article>
 
 			<h3 id="module-lifecycle" class="sect">Lifecycle Management</h3>
@@ -326,21 +341,34 @@ myModule = new Module({
 
 			<h3 id="module-functions" class="sect">'Static' Functions</h3>
 			<aside>
-				<p>Functions that are attached onto the <code>Module</code> constructor to use whenever.</p>
+				<p>Functions that are attached onto the <code>Module</code> constructor which are available to use whenever and wherever.</p>
 			</aside>
 			<article id="module-extend">
 				<h3>Module.extend <code>( properties<b>object</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Use to create your own <code>Module</code> 'class' by extending <code>Module</code>.  Provide instance properties, as well as optional classProperties to be attached directly to the modules's constructor function.</p>
+<pre><code class="prettyprint">var MyModule = Module.extend({
+  initialize: function(){ // implement },
+  start: function(){ // implement },
+  stop:  function(){ // implement },
+  events {
+    // implement
+  }
+});
+</code></pre>
 			</article>
 			<article id="module-installeventsto">
 				<h3>Module.installEventsTo <code>( targetObject<b>object</b> )</code></h3>
-				<p>TODO.</p>
+				<p>Mixes in an event aggregator onto a target object, providing the object with the same event method signatures described in <a href="#module-messaging">Module Messaging</a>.</p>
+<pre><code class="prettyprint">var testObject = {};
+Module.installEventsTo( testObject );
+testObject.emit('iCanEmitEvents');
+</code></pre>
 			</article>
 
 			<h2 id="map">Map</h2>
 			<aside>
-				<p>A map object acts like a colleciton.  It allows us to add, get and remove in a consitent manner.  It also provides an interface to iterate over all objects within the map and to listen for events on objects within the map.<br/><br/>
-				Maps are created using a modules <code><a href="#module-createmap">createMap</a></code> method.</p>
+				<p>A map object acts like a colleciton.  It allows us to add, get and remove in a consistent manner.  It also provides an interface to iterate over all objects within the map and to listen for events on objects within the map.</p>
+				<p>Maps are created using a modules <code><a href="#module-createmap">createMap</a></code> method.</p>
 			</aside>
 			<article id="map-add">
 				<h3>add <code>( name<b>String</b>, object<b>Object</b> )</code></h3>
@@ -355,7 +383,7 @@ models.add({
   'ourModel': new Model()
 });
 </code></pre>
-			<p>Multiple objects can be added with the same name if desired:</p>
+			<p>Multiple objects can be added with the same name if, desired.  An array of the objects is then returned upon a <code>get</code> call if more than one object exists in the mapping.</p>
 <pre><code class="prettyprint">// add a single 'test' object
 models.add('test', new Model());
 
@@ -386,23 +414,38 @@ models.each( function( model, name ){
 </code></pre>
 			</article>
 			<article id="map-eachtry">
-				<h3>eachTry <code>( name<b>String</b> )</code></h3>
+				<h3>eachTry <code>( methodName<b>String</b>, [*<b>any</b>] )</code></h3>
 				<p>Similar to each, however if the stated method does not exist then no error is thrown.  This is useful when we want to try invoke a mathod on all of our objects in a map knowing that the method may not exist on some objects.</p>
 			</article>
 			<article id="map-length">
-				<h3>length <code>( name<b>String</b> )</code></h3>
+				<h3>length ()</h3>
 				<p>Returns the number of objects currently in the map.</p>
 			</article>
 			<article id="map-on">
-				<h3>on <code>( name<b>String</b> )</code></h3>
-				<p>Handle events on all objects within the map.  See <code><a href="#module-on">on()</a></code></p>
+				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
+				<p>Handle events on all objects within the map.  See <code><a href="#module-on">on()</a></code>.  The <code>object</code> emitting the error and it's <code>name</code> are injected into the handler function.</p>
+<pre><code class="prettyprint">// add objects to the models map
+models.add({
+  'myModel': new Model(),
+  'yourModel': new Model(),
+  'ourModel': new Model()
+});
+
+// declare an event handler
+models.on( 'change', function( model, modelName, data ){
+  this.log('The model ' + modelName + ' has changed.');
+});
+
+// logs out 'The model myModel has changed'
+models.get('myModel').emit('change');
+</code></pre>
 			</article>
 			<article id="map-off">
-				<h3>off <code>( name<b>String</b> )</code></h3>
+				<h3>off <code>( [event<b>string</b>], [handler<b>function</b>], [context] )</code></h3>
 				<p>Remove event handlers on all objects within the map.  See <code><a href="#module-off">off()</a></code></p>
 			</article>
 			<article id="map-remove">
-				<h3>remove <code>( name<b>String</b> )</code></h3>
+				<h3>remove <code>( [objectName<b>String</b>] )</code></h3>
 				<p>Removes one or all objects from a map.</p>
 <pre><code class="prettyprint">models.add({
   'myModel': new Model(),
