@@ -6,6 +6,7 @@
 		<title>Module.js</title>
 		<meta name="description" content="A library for creating modular JavaScript applications.">
     	<meta name="author" content="James Lockwood">
+    	<meta name="keywords" content="modulejs, module.js, module, modular javascript, javascript module, modular javascript applications">
 		<link rel="stylesheet" href="website/css/styles.css">
 		<link rel="stylesheet" href="website/css/pygment_trac.css">
 		<link rel="stylesheet" href="website/css/syntax.css">
@@ -96,14 +97,22 @@
 
 		<section>
 
-			<p class="leader">Talk about instances.  No parent / child relationship.  Drop in a module anywhere (providing it a DOM scope if it has any interactions with the DOM),  subscribe to it’s events, and go from there.</p>
+			<p class="leader">
+				Module.js enables you to build <strong>large-scale JavaScript applications</strong> that are composed of several <strong>decoupled</strong>, testable and reusable <strong>modules</strong>.
+			</p>
+			<p>
+				It promotes apps to be built using a modular, event-driven architecture. Each module is aggressively self-concerned, having it's own DOM scope, it's own lifecycle management, and it's own messaging/events mechanism.</p>
+			<p>The project his hosted on <a href="https://github.com/jameslockwood/module">GitHub</a>, and is available to use under the <a href="https://raw.github.com/jameslockwood/module/master/license">MIT Software License</a>.  You can report bugs on the <a href="https://github.com/jameslockwood/module/issues">GitHub issues page</a>.</p>
+
+			<p>Module.js has no hard dependencies; however if you require DOM manipulation then <a href="http://www.jquery.com">jQuery</a> or <a href="http://www.zeptojs.com">Zepto</a> are needed.</p>
 
 			<h2 id="intro">Introduction</h2>
-			<p>Stuff here...  Dependencies,  what it works with.  Link to tutorials when they're done.</p>
-			<p>Modular Javascript Architectures - link to other resources.</p>
+			<p>When creating web apps in JavaScript with any degree of complexity, it’s essential to have well-organized code; maintaining a spaghetti-coded project will only cause you pain and suffering as entropy provails. &nbsp;Module.js aims to help you take a modular approach when building JavaScript web apps, making your code more organized, scalable and maintainable.</p>
+			<p>It provides a high-level architectural structure, leaving lower-level implementation choices (such as an individual module's usage of views, models, templating etc.) to be decided by the developer.  It's goal is to create disparate modules of which, once finished, can be dropped-in to any part of your application.  Just provide it with a DOM scope on instantiation and subscribe to any events of interest that it emits.</p>
+			<p>You'll find the module.js API desribed in full below.  For more help, take a look at the <a href="#tutorials">tutorials</a>.  For further reading on large scale applicaiton development, try <a href="http://addyosmani.com/largescalejavascript/">Large Scale JavaScript</a> by Addy Osmani, and <a href="http://lanyrd.com/2011/jsconf/sfgdk/">The Fututure is Modules not Frameworks</a> by John Hann.</p>
 
 			<h2 id="module">Module</h2>
-			<p>To create a module, simply instantiate the Module constructor.  If the module is to be concerned with the DOM, then a DOM reference (in the form of a CSS selector or jQuery/Zepto object) should be passed in as the modules <code>scope</code>.</p>
+			<p>To create a module, simply instantiate the Module constructor.  If the module is to be concerned with the DOM, then a DOM reference (in the form of a CSS selector or jQuery/Zepto object) should be passed in as the modules <code>scope</code>.  This will automatically set the module scope under-the-covers using <code><a href="#module-setscope">setScope()</a></code>.</p>
 <pre><code class="prettyprint language-js">// creating a module
 module = new Module();
 
@@ -114,7 +123,7 @@ module = new Module({
 });
 </code></pre>
 
-			<p>The <code>initialize()</code> method is automatically invoked when the module is created.  You can extend the module constructor too:</p>
+			<p>The <code>initialize()</code> method is automatically invoked when the module is created, if defined.  You can extend the module constructor too:</p>
 
 <pre><code class="prettyprint language-js">// extending the Module constructor
 App = Module.extend({
@@ -126,7 +135,7 @@ App = Module.extend({
 app = new App({scope : '#app-wrapper'});
 app.start();
 </code></pre>
-			<p>You'll notice above that unimplemented <code>start</code> and <code>stop</code> methods have been supplied.  These are the primary strategies to manage a modules lifecycle.</p>
+			<p>You'll notice above that unimplemented <code><a href="#module-start">start</a></code> and <code><a href="#module-stop">stop</a></code> methods have been supplied.  These are the primary strategies to manage a <a href="#module-lifecycle">modules lifecycle</a>.</p>
 
 			<h3 id="module-properties" class="sect">Properties</h3>
 			<aside>
@@ -135,13 +144,13 @@ app.start();
 			<article id="module-scope">
 				<h3>scope <code><b>String</b></code></h3>
 				<p>A CSS selector representing the modules DOM scope, for example <code>'#anElement'</code>.
-				Value will be <code>null</code> if scope has not been set.</p>
+				The value will be <code>null</code> if scope has not been set.</p>
 			</article>
 
 			<article id="module-sscope">
 				<h3>$scope <code><b>Object</b></code></h3>
 
-				<p>A jQuery/Zepto object referencing the modules DOM scope.  Value will be <code>null</code> if scope has not been set or jQuery/Zepto isn't being used.</p>
+				<p>A jQuery/Zepto object referencing the modules DOM scope.  The value will be <code>null</code> if scope has not been set or jQuery/Zepto isn't being used.</p>
 			</article>
 
 			<article id="module-events">
@@ -178,7 +187,7 @@ app.start();
   }
 }
 </code></pre>
-				<p>We can listen out for events across multiple objects by using a wildcard:</p>
+				<p>We can listen out for events across multiple objects by using a '<code>*</code>' wildcard:</p>
 <pre><code class="prettyprint">events:{
   // handle change event on the model
   'model change' : function( data ){ // do something },
@@ -193,7 +202,7 @@ app.start();
   }
 }
 </code></pre>
-				<p>When using <a href="#map">mappings</a>, matching event handlers are automatically bound - <a href="#module-bindevents"><code>bindEvents()</code></a> does not need to be called.
+				<p id="module-mapevents">When using <a href="#map">mappings</a>, matching event handlers are automatically bound - <a href="#module-bindevents"><code>bindEvents()</code></a> does not need to be called.
 				Suppose a module has a <code>map</code> containing chat, email and notification sub-modules. Event handlers can be declared like so:</p>
 <pre><code class="prettyprint">App = Module.extend({
   initialize: function(){
@@ -211,22 +220,20 @@ app.start();
     'widgets.chat message': function( message ){
       this.widgets.get('notification').alert( message );
     },
-
     // handles any widgets 'message' event
-    // the maps object and name are automatically
-    // injected into the handler function
     'widgets.* message': function( widget, widgetName, message ){
       this.widgets.get('notification').alert( message );
     }
   }
 });
 </code></pre>
+				<p>Note how when using a '<code>*</code>' wildcard, the emitting <code>object</code> and <code>objectName</code> are injected into the beginning of the event handler function's arguments.</p>
 			</article>
 			<h3 id="module-messaging" class="sect">Communication Methods</h3>
 			<aside>
 				<p>A module is designed to be used in an event-driven architecture.  To promote loose coupling and seperation of concerns, each module is self-concerned and should assume no knowledge of <i>anything</i> beyond itself and it's contents, where possible.</p>
 				<p>Following this paradigm, each module has it's own <a href="http://lostechies.com/derickbailey/2012/04/03/revisiting-the-backbone-event-aggregator-lessons-learned/">event aggregator</a> which can <code><a href="#module-emit">emit</a></code> events of interest, and also provides a mechanism for others to subcribe to any of these events using the <code><a href="#module-on">on</a></code> method.</p>
-				<p><strong>Further Reading</strong> &nbsp; For more information on event-driven communication, take a look at the <a href="#tutorials-app">Creating a Modular Application</a> tutorial which covers how to 'wire-up' your various modules.  Additionally, Addy Osmani has written an explanation of cross-module communication using the <a href="http://addyosmani.com/largescalejavascript/#mediatorpattern">mediator pattern</a>.</p>
+				<p><strong>Further Reading</strong> &nbsp; For more information on event-driven communication, take a look at the <a href="#tutorials-app">Creating a Modular Application tutorial</a> which covers how to 'wire-up' your various modules.  Additionally, Addy Osmani has written an explanation of cross-module communication using the <a href="http://addyosmani.com/largescalejavascript/#mediatorpattern">mediator pattern</a>.</p>
 			</aside>
 			<article id="module-on">
 				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
@@ -241,35 +248,38 @@ app.start();
 			</article>
 			<article id="module-off">
 				<h3>off <code>( [event<b>string</b>], [handler<b>function</b>], [context] )</code></h3>
-				<p>Removes a previously-bound callback function from the module. If no context is specified, all of the versions of the callback with different contexts will be removed. If no callback is specified, all callbacks for the event will be removed. If no event is specified, callbacks for all events will be removed.</p>
-<pre><code class="prettyprint">// Removes just the 'onError' callback.
+				<p>Removes/unbinds a previously-bound callback function from the module. If no context is specified, all of the versions of the callback with different contexts will be removed. If no callback is specified, all callbacks for the event will be removed. If no event is specified, callbacks for all events will be removed.</p>
+<pre><code class="prettyprint">// Removes just the 'onError' event handler.
 module.off('error', onError);
 
-// Removes all 'error' callbacks.
+// Removes all 'error' event handlers.
 module.off('error');
 
-// Removes all callbacks on the module.
+// Removes all event handlers on the module.
 module.off();
 </code></pre>
-				<p>Remember to unbind events when you destoy your module - see the <a href="#tutorials-lifecycle">Module Lifecycle Management</a> tutorial.</p>
+				<p>Remember to unbind events when you destroy your module - see the <a href="#tutorials-lifecycle">Module Lifecycle Management</a> tutorial.</p>
 			</article>
 			<article id="module-emit">
 				<h3>emit <code>( event<b>string</b>, [*args<b>any</b>] )</code></h3>
-				<p>Emits an event. Subsequent arguments provided in <code>emit</code> will be passed along to any event handlers.</p>
-<pre><code class="prettyprint">module.emit('newMessage');
+				<p>Emits an event. Subsequent arguments provided to <code>emit</code> will be passed along to any event handlers.</p>
+<pre><code class="prettyprint">// emit a 'newMessage' event
+module.emit('newMessage');
+// emit a 'newMessage' event with additional details
 module.emit('newMessage', details);
 </code></pre>
+				<p>Events are described as any 'significant change in state'.  Modules should <code>emit</code> events when they have any useful information to present for consumption by others.</p>
 			</article>
 
 			<h3 id="module-dom" class="sect">DOM Scope Methods</h3>
 			<aside>
 				<p>Each module is self-concerned; it should only ever interact with it's own DOM scope.  The following methods provide access to a module's scoped DOM reference, ring-fencing it away from the rest of the DOM.</p>
-				<p><strong>Note</strong> &nbsp; It's worth an important mention that each module shouldn't be <i>directly</i> resposible for manipulating it's own DOM reference. Each module in-effect is acting like a controller, managing it's own models, views and event emission.</p>
+				<p><strong>Note on DOM manipulation</strong> &nbsp; It's worth an important mention that each module shouldn't be <i>directly</i> resposible for manipulating it's own DOM reference. Each module is effectively acting like a pseudo-controller, managing it's own models, views and event emission.</p>
 				<p>Therefore - to keep things right and proper - a module *should* delegate any DOM interactions to it's own view objects.</p>
 			</aside>
 			<article id="module-selector">
 				<h3>$ <code>( selector<b>string</b> )</code></h3>
-				<p>If jQuery or Zepto is included on the page, each module has a $ function that runs queries scoped within the modules DOM scope.</p>
+				<p>If jQuery or Zepto is included on the page, the <code>$</code> method performs DOM queries specifically scoped to the modules DOM reference.  This is the equivalent to <code>this.$scope.find()</code>.</p>
 <pre><code class="prettyprint">// run a scoped query within our module
 module.$('.foo');
 
@@ -288,15 +298,15 @@ myModule = new Module({
 			</article>
 			<article id="module-hide">
 				<h3>hide ()</h3>
-				<p>Hides the modules element - equivalent to <code>this.$scope.hide()</code>. All other DOM manipulation should be delegated to views.</p>
+				<p>Hides the modules DOM element - equivalent to <code>this.$scope.hide()</code>. All other DOM manipulation should be delegated to views.</p>
 			</article>
 			<article id="module-show">
 				<h3>show ()</h3>
-				<p>Show the modules element - equivalent to <code>this.$scope.show()</code>. All other DOM manipulation should be delegated to views.</p>
+				<p>Reveals the modules DOM element - equivalent to <code>this.$scope.show()</code>. All other DOM manipulation should be delegated to views.</p>
 			</article>
 			<article id="module-setscope">
 				<h3>setScope <code>( scope<b>string or jquery/Zepto object</b> )</code></h3>
-				<p>Sets the module's scope.  Accepts a CSS selector or a jQuery/Zepto object referencing a DOM element.</p>
+				<p>Sets the module's scope.  Accepts a CSS selector or a jQuery/Zepto object referencing a DOM element.  Automatically updates the <code><a href="#module-scope">scope</a></code> and <code><a href="#module-sscope">$scope</a></code> properties when invoked.</p>
 			</article>
 
 			<h3 id="module-utils" class="sect">Utility Methods</h3>
@@ -306,10 +316,43 @@ myModule = new Module({
 			<article id="module-bindevents">
 				<h3>bindEvents ()</h3>
 				<p>Binds event handlers set in <code><a href="#module-events">events</a></code> to any matching properties on the module.</p>
+<pre><code class="prettyprint">Module.extend({
+  initialize: function(){
+    this.foo = new Model();
+    this.bar = new View();
+    // bind matching events to the above properties
+    this.bindEvents();
+  },
+  events: {
+    'foo testEvent': function(){ // implement },
+    'bar someEvent': function(){ // implement }
+  }
+});
+</code></pre>
+				<p>If you are only using <code><a href="map">Maps</a></code> to store objects in your modules, matching events are automatically bound and <code>bindEvents</code> does not need to be called.</p>
 			</article>
 			<article id="module-createmap">
 				<h3>createMap <code>( name<b>String</b> )</code></h3>
-				<p>Returns a <code>Map</code> object - see <code><a href="#map">Map</a></code> documentation.</p>
+				<p>Returns a <code><a href="#map">Map</a></code> object.  The provided <code>name</code> is the map's identifier; it's used to automatically bind any matching event declarations in the <code><a href="#module-events">events</a></code> property when objects are added to the map.</p>
+<pre><code class="prettyprint">Module.extend({
+  initialize: function(){
+    // create a map to store 'subModules'
+    this.subModules = this.createMap('subModules');
+    this.subModules.add({
+      'email' : someObject,
+      'chat' : anotherObject
+    })
+  },
+  // our 'subModules' map events are automatically bound
+  events: {
+    'subModules.*': {
+      'error': function(){},
+      'update': function(){}
+    },
+    'subModules.email message': function(){}
+  }
+});
+</code></pre>
 			</article>
 			<article id="module-log">
 				<h3>log <code>( [*<b>any</b>] )</code></h3>
@@ -328,15 +371,16 @@ module.throwException(new Error('Something went wrong'));
 
 			<h3 id="module-lifecycle" class="sect">Lifecycle Methods</h3>
 			<aside>
-				<p>Todo - link to tutorials.</p>
+				<p>A <code>module</code>'s interface has <code>start</code> and <code>stop</code> methods to allow others to tear-up and tear-down a module respectively.</p>
+				<p>These methods should be the sole entry-points for these actions.  When <code>start()</code> is invoked on a module, the module should then take care of setting-up itself from here forth.  Similarly, <code>stop()</code> should completely tear-down the module, including any views, models and events (<code><a href="#module-off">off</a></code>).  See the <a href="#tutorials-lifecycle">Lifecycle Management tutorial</a> for further reading.</p>
 			</aside>
 			<article id="module-start">
 				<h3>start ()</h3>
-				<p>TODO.</p>
+				<p>Implement this method as the sole entry-point to start the module.  When called, the <code>start()</code> method should fully take care of module installation - see the <a href="#tutorials-lifecycle">Lifecycle Management tutorial</a>.</p>
 			</article>
 			<article id="module-stop">
-				<h3>stop <code>( name<b>String</b> )</code></h3>
-				<p>TODO.</p>
+				<h3>stop ()</h3>
+				<p>Implement this method as the sole entry-point to stop the module.  On tear-down, remember to destroy internal objects and unbind any events - see the <a href="#tutorials-lifecycle">Lifecycle Management tutorial</a>.</p>
 			</article>
 
 			<h3 id="module-functions" class="sect">'Static' Functions</h3>
@@ -367,8 +411,8 @@ testObject.emit('iCanEmitEvents');
 
 			<h2 id="map">Map</h2>
 			<aside>
-				<p>A map object acts like a colleciton.  It allows us to add, get and remove in a consistent manner.  It also provides an interface to iterate over all objects within the map and to listen for events on objects within the map.</p>
-				<p>Maps are created using a modules <code><a href="#module-createmap">createMap</a></code> method.</p>
+				<p>A map object acts like a colleciton.  It allows us to <code>add</code>, <code>get</code> and <code>remove</code> objects in a consistent manner.  It also provides an interface to iterate over all objects within the map (<code>each</code>) and to listen for events on objects within the map (<code>on</code>).  See the <a href="#tutorials-maps">Using Maps tutorial</a>.</p>
+				<p>Maps are created using a module's <code><a href="#module-createmap">createMap</a></code> method.</p>
 			</aside>
 			<article id="map-add">
 				<h3>add <code>( name<b>String</b>, object<b>Object</b> )</code></h3>
@@ -383,13 +427,13 @@ models.add({
   'ourModel': new Model()
 });
 </code></pre>
-			<p>Multiple objects can be added with the same name if, desired.  An array of the objects is then returned upon a <code>get</code> call if more than one object exists in the mapped value.</p>
-<pre><code class="prettyprint">// add a single 'test' object
+			<p>Multiple objects can be added with the same name, if desired.  An array of the objects is then returned upon a <code>get</code> call if more than one object exists in the mapped value.</p>
+<pre><code class="prettyprint">// add a single object mapped to 'test'
 models.add('test', new Model());
 
 models.get('test'); // returns model
 
-// add more 'test' objects to the same mapping
+// add more objects to the same 'test' mapped value
 models.add('test', new Model());
 models.add('test', new Model());
 
@@ -423,7 +467,7 @@ models.each( function( model, name ){
 			</article>
 			<article id="map-on">
 				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
-				<p>Handle events on all objects within the map.  See <code><a href="#module-on">on()</a></code>.  The <code>object</code> emitting the error and it's <code>name</code> are injected into the handler function.</p>
+				<p>Handle events on all objects within the map.  See <code><a href="#module-on">on()</a></code> and <a href="#module-mapevents">declaring map events</a>.  The mapped <code>object</code> emitting the event and it's <code>name</code> are injected into the handler function.</p>
 <pre><code class="prettyprint">// add objects to the models map
 models.add({
   'myModel': new Model(),
@@ -463,6 +507,20 @@ models.remove();
 models.length(); // 0
 </code></pre>
 			</article>
+
+			<h2 id="tutorials">Tutorials</h2>
+			<h3 id="tutorials-creating">Creating a Module</h3>
+			<p>Coming soon.</p>
+			<h3 id="tutorials-scope">Using Module Scope</h3>
+			<p>Coming soon.</p>
+			<h3 id="tutorials-map">Using Maps</h3>
+			<p>Coming soon.</p>
+			<h3 id="tutorials-events">Hooking-Up Events</h3>
+			<p>Coming soon.</p>
+			<h3 id="tutorials-app">Creating a Modular Application</h3>
+			<p>Coming soon.</p>
+			<h3 id="tutorials-lifecycle">Module Lifecycle Management - Cleaning Up After Yourself</h3>
+			<p>Coming soon.</p>
 		</section>
 
 		<footer>
