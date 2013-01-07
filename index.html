@@ -130,22 +130,22 @@ app.start();
 
 			<h3 id="module-properties" class="sect">Properties</h3>
 			<aside>
-				<p>A module has three properties you need to worry about - <code>scope</code> and <code>$scope</code> both relate to the modules <a href="#module-dom">DOM scope</a>. The <code>events</code> property is set manually to declare event handlers.</p>
+				<p>A module has three reserved properties that you need to have knowledge of. <code>scope</code> and <code>$scope</code> both relate to the modules <a href="#module-dom">DOM scope</a>. The <code>events</code> property is set manually to declare event handlers.</p>
 			</aside>
 			<article id="module-scope">
-				<h3>scope <code>String</code></h3>
+				<h3>scope <code><b>String</b></code></h3>
 				<p>A CSS selector representing the modules DOM scope, for example <code>'#anElement'</code>.
 				Value will be <code>null</code> if scope has not been set.</p>
 			</article>
 
 			<article id="module-sscope">
-				<h3>$scope <code>Object</code></h3>
+				<h3>$scope <code><b>Object</b></code></h3>
 
 				<p>A jQuery/Zepto object referencing the modules DOM scope.  Value will be <code>null</code> if scope has not been set or jQuery/Zepto isn't being used.</p>
 			</article>
 
 			<article id="module-events">
-				<h3>events <code>Object</code></h3>
+				<h3>events <code><b>Object</b></code></h3>
 
 				<p>An events hash.  It provides declarative callbacks to handle events that occur on objects within a module.  The context of the callback handlers ( <code>this</code> ) will always be the current module.</p>
 				<p>A basic event declaration includes the object name of interest, the event it emits, and a handler function.
@@ -230,7 +230,7 @@ app.start();
 			</aside>
 			<article id="module-on">
 				<h3>on <code>( event<b>string</b>, handler<b>function</b>, [context] )</code></h3>
-				<p>Provides a mechanism to subscribe to a modules events.  The method binds a callback function to the module. The callback will be invoked whenever the event is fired.</p>
+				<p>Provides a mechanism to subscribe to events emitted by a module.  The method binds a callback function to the module. The callback will be invoked whenever the event is fired.</p>
 <pre><code class="prettyprint">module.on('error', function( error, message ){
   throw error;
 })
@@ -263,7 +263,7 @@ module.emit('newMessage', details);
 
 			<h3 id="module-dom" class="sect">DOM Scope Methods</h3>
 			<aside>
-				<p>Each module is self-concerned; it should only ever interact with it's own DOM scope.  The following methods provide access to a module's scoped DOM reference - ringfencing it away from the rest of the DOM.</p>
+				<p>Each module is self-concerned; it should only ever interact with it's own DOM scope.  The following methods provide access to a module's scoped DOM reference, ring-fencing it away from the rest of the DOM.</p>
 				<p><strong>Note</strong> &nbsp; It's worth an important mention that each module shouldn't be <i>directly</i> resposible for manipulating it's own DOM reference. Each module in-effect is acting like a controller, managing it's own models, views and event emission.</p>
 				<p>Therefore - to keep things right and proper - a module *should* delegate any DOM interactions to it's own view objects.</p>
 			</aside>
@@ -299,7 +299,7 @@ myModule = new Module({
 				<p>Sets the module's scope.  Accepts a CSS selector or a jQuery/Zepto object referencing a DOM element.</p>
 			</article>
 
-			<h3 id="module-utils" class="sect">Utils</h3>
+			<h3 id="module-utils" class="sect">Utility Methods</h3>
 			<aside>
 				<p>Various utility methods used for Map creation, event binding, logging and error handling.</p>
 			</aside>
@@ -326,7 +326,7 @@ module.throwException(new Error('Something went wrong'));
 </code></pre>
 			</article>
 
-			<h3 id="module-lifecycle" class="sect">Lifecycle Management</h3>
+			<h3 id="module-lifecycle" class="sect">Lifecycle Methods</h3>
 			<aside>
 				<p>Todo - link to tutorials.</p>
 			</aside>
@@ -344,7 +344,7 @@ module.throwException(new Error('Something went wrong'));
 				<p>Functions that are attached onto the <code>Module</code> constructor which are available to use whenever and wherever.</p>
 			</aside>
 			<article id="module-extend">
-				<h3>Module.extend <code>( properties<b>object</b> )</code></h3>
+				<h3>Module.extend <code>( properties<b>object</b>, [classProperties<b>object</b>] )</code></h3>
 				<p>Use to create your own <code>Module</code> 'class' by extending <code>Module</code>.  Provide instance properties, as well as optional classProperties to be attached directly to the modules's constructor function.</p>
 <pre><code class="prettyprint">var MyModule = Module.extend({
   initialize: function(){ // implement },
@@ -358,7 +358,7 @@ module.throwException(new Error('Something went wrong'));
 			</article>
 			<article id="module-installeventsto">
 				<h3>Module.installEventsTo <code>( targetObject<b>object</b> )</code></h3>
-				<p>Mixes in an event aggregator onto a target object, providing the object with the same event method signatures described in <a href="#module-messaging">Module Messaging</a>.</p>
+				<p>Mixes in an event aggregator onto the target object, providing the object with the same event method signature as described in <a href="#module-messaging">Module Messaging</a>.</p>
 <pre><code class="prettyprint">var testObject = {};
 Module.installEventsTo( testObject );
 testObject.emit('iCanEmitEvents');
@@ -383,13 +383,13 @@ models.add({
   'ourModel': new Model()
 });
 </code></pre>
-			<p>Multiple objects can be added with the same name if, desired.  An array of the objects is then returned upon a <code>get</code> call if more than one object exists in the mapping.</p>
+			<p>Multiple objects can be added with the same name if, desired.  An array of the objects is then returned upon a <code>get</code> call if more than one object exists in the mapped value.</p>
 <pre><code class="prettyprint">// add a single 'test' object
 models.add('test', new Model());
 
 models.get('test'); // returns model
 
-// add more 'test' objects
+// add more 'test' objects to the same mapping
 models.add('test', new Model());
 models.add('test', new Model());
 
