@@ -178,7 +178,7 @@ app.start();
   }
 });
 </code></pre>
-				<p>We can assign multiple event handlers on an object:</p>
+				<p>We can assign multiple event handlers onto an object:</p>
 <pre><code class="prettyprint">events:{
   'model' : {
     'change' : function( data ){},
@@ -189,10 +189,10 @@ app.start();
 </code></pre>
 				<p>We can listen out for events across multiple objects by using a '<code>*</code>' wildcard:</p>
 <pre><code class="prettyprint">events:{
-  // handle change event on the model
+  // handle 'change' event on the model
   'model change' : function( data ){ // do something },
 
-  // handle change event on any object
+  // handle 'change' event on any object
   '* change' : function( data ){ // captures same event },
 
   // handle multiple events on any object
@@ -274,8 +274,8 @@ module.emit('newMessage', details);
 			<h3 id="module-dom" class="sect">DOM Scope Methods</h3>
 			<aside>
 				<p>Each module is self-concerned; it should only ever interact with it's own DOM scope.  The following methods provide access to a module's scoped DOM reference, ring-fencing it away from the rest of the DOM.</p>
-				<p><strong>Note on DOM manipulation</strong> &nbsp; It's worth an important mention that each module shouldn't be <i>directly</i> resposible for manipulating it's own DOM reference. Each module is effectively acting like a pseudo-controller, managing it's own models, views and event emission.</p>
-				<p>Therefore - to keep things right and proper - a module *should* delegate any DOM interactions to it's own view objects.</p>
+				<p><strong>Note on DOM manipulation</strong> &nbsp; It's worth an important mention that each module shouldn't be <i>directly</i> resposible for manipulating it's own DOM reference. Each module is effectively acting like a pseudo-controller; managing it's own models, views, sub-modules, and event emission.</p>
+				<p>Therefore - to keep things 'right and proper' - a module *should* delegate any DOM interactions to it's own view objects.</p>
 			</aside>
 			<article id="module-selector">
 				<h3>$ <code>( selector<b>string</b> )</code></h3>
@@ -283,7 +283,7 @@ module.emit('newMessage', details);
 <pre><code class="prettyprint">// run a scoped query within our module
 module.$('.foo');
 
-// create a Backbone view, passing in the module's scope
+// create a view within the module, passing in it's scope
 myModule = new Module({
   initialize : function(){
     this.view = new Backbone.View({
@@ -349,7 +349,7 @@ myModule = new Module({
       'error': function(){},
       'update': function(){}
     },
-    'subModules.email message': function(){}
+    'subModules.email message': function( msg ){}
   }
 });
 </code></pre>
@@ -371,7 +371,7 @@ module.throwException(new Error('Something went wrong'));
 
 			<h3 id="module-lifecycle" class="sect">Lifecycle Methods</h3>
 			<aside>
-				<p>A <code>module</code>'s interface has <code>start</code> and <code>stop</code> methods to allow others to tear-up and tear-down a module respectively.</p>
+				<p>A <code>module</code>'s interface has unimplemented <code>start</code> and <code>stop</code> methods to allow others to tear-up and tear-down a module respectively.</p>
 				<p>These methods should be the sole entry-points for these actions.  When <code>start()</code> is invoked on a module, the module should then take care of setting-up itself from here forth.  Similarly, <code>stop()</code> should completely tear-down the module, including any views, models and events (<code><a href="#module-off">off</a></code>).  See the <a href="#tutorials-lifecycle">Lifecycle Management tutorial</a> for further reading.</p>
 			</aside>
 			<article id="module-start">
